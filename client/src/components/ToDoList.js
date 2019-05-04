@@ -10,18 +10,18 @@ import {
     TransitionGroup
 } from 'react-transition-group'
 import uuid from 'uuid'
+import { connect } from 'react-redux';
+import { getItems } from "../actions/itemActions";
+import PropTtypes from 'prop-types';
 
 class ToDoList extends Component {
-    state = {
-        items: [
-            { id: uuid(), name: 'Get Groceries'},
-            { id: uuid(), name: 'Get Tickets'},
-            { id: uuid(), name: 'Get Keys'},
-            { id: uuid(), name: 'Get Clothes'}
-        ]
+    componentDidMount() {
+        this.props.getItems();
     }
+
     render() {
-        const { items } = this.state;
+
+        const { items } = this.props.item;
         return (
             <Container>
                 <Button color = "dark" style = {{marginBottom: '2rem'}}
@@ -53,4 +53,13 @@ class ToDoList extends Component {
     }
 }
 
-export default ToDoList;
+ToDoList.propTypes = {
+    getItems: PropTtypes.func.isRequired,
+    item: PropTtypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+    item: state.item
+});
+
+export default connect(mapStateToProps, { getItems })(ToDoList);
